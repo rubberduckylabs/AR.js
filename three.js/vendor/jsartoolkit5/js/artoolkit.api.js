@@ -1024,6 +1024,30 @@
 			this.ctx.drawImage(image, marginLeft, 0, scaledWidth, scaledHeight); // draw video
 		}
 
+		// ********************
+
+		var displayCanvas = document.getElementById('display-canvas');
+		if (displayCanvas != null) {
+			displayCanvas.width = this.canvas.width;
+			displayCanvas.height = this.canvas.height;
+			displayCanvas.style.cssText = this.canvas.style.cssText;
+			var displayCtx = displayCanvas.getContext('2d');
+			var iData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+			var newData = iData.data
+			for(var i = 0; i < newData.length; i+=4) {
+				var r = newData[i];
+				var g = newData[i+1];
+				var b = newData[i+2];
+				var brightness = (3*r+4*g+b)>>>3;
+				newData[i] = brightness;
+				newData[i+1] = brightness;
+				newData[i+2] = brightness;
+			}
+			displayCtx.putImageData(iData, 0, 0);
+		}
+		
+		// ********************
+
 		var imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
 		var data = imageData.data;
 
